@@ -2,9 +2,9 @@ import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta
 
-def generate_synthetic_data(n_patients=1000, n_appointments=5000):
+def generate_realistic_synthetic_data(n_patients=1000, n_appointments=5000, target_noshow_rate=0.25):
     """
-    Generate synthetic appointment data based on healthcare research
+    Generate synthetic appointment data with a more realistic no-show rate
     
     Parameters:
     -----------
@@ -12,6 +12,8 @@ def generate_synthetic_data(n_patients=1000, n_appointments=5000):
         Number of unique patients to generate
     n_appointments : int
         Total number of appointments to generate
+    target_noshow_rate : float
+        Target no-show rate (0.20-0.30 is realistic for many healthcare settings)
     
     Returns:
     --------
@@ -43,8 +45,8 @@ def generate_synthetic_data(n_patients=1000, n_appointments=5000):
         # Correlated with SES and distance
         transport_score = max(0, min(10, ses_score * 0.7 + np.random.normal(0, 1) - distance/20))
         
-        # Previous no-show rate (0-1)
-        prev_noshow_rate = max(0, min(1, 0.7 - ses_score/15 + np.random.normal(0, 0.1)))
+        # Previous no-show rate (0-1) - adjusted to be more realistic
+        prev_noshow_rate = max(0, min(0.8, 0.3 - ses_score/25 + np.random.normal(0, 0.1)))
         
         patients.append({
             'patient_id': f'P{i:04d}',
@@ -64,6 +66,10 @@ def generate_synthetic_data(n_patients=1000, n_appointments=5000):
     end_date = datetime.now()
     
     appointments = []
+    
+    # Calculate global scaling factor to achieve target no-show rate
+    # This will be adjusted later based on actual results
+    global_scale_factor = target_noshow_rate / 0.7  # Initial estimate
     
     for i in range(n_appointments):
         # Randomly select a patient
@@ -96,18 +102,21 @@ def generate_synthetic_data(n_patients=1000, n_appointments=5000):
         lead_time = min(90, int(lead_time))
         
         # Lead time effect (longer lead times have higher no-show)
-        lead_factor = min(2.0, 1.0 + lead_time/30)
+        lead_factor = min(1.5, 1.0 + lead_time/60)  # Reduced impact
         
         # Weather effect (random proxy)
-        weather_factor = np.random.uniform(0.8, 1.2)
+        weather_factor = np.random.uniform(0.9, 1.1)  # Reduced impact
         
         # Calculate no-show probability
         base_prob = patient['prev_noshow_rate']
         noshow_prob = base_prob * dow_factor * tod_factor * type_factor * lead_factor * weather_factor
         
         # Adjust based on transport score (lower score means higher no-show)
-        transport_effect = max(0.8, 2.0 - patient['transport_score']/5)
+        transport_effect = max(0.9, 1.5 - patient['transport_score']/10)  # Reduced impact
         noshow_prob *= transport_effect
+        
+        # Apply global scaling factor to achieve target rate
+        noshow_prob *= global_scale_factor
         
         # Cap probability between 0 and 1
         noshow_prob = max(0, min(1, noshow_prob))
@@ -133,10 +142,38 @@ def generate_synthetic_data(n_patients=1000, n_appointments=5000):
     # Merge with patient data
     full_df = appointments_df.merge(patients_df, on='patient_id')
     
+    # Check actual no-show rate and adjust if needed
+    actual_rate = full_df['is_noshow'].mean()
+    print(f"Generated data with no-show rate: {actual_rate:.2%}")
+    
+    # If the actual rate is too far from target, we could re-run with an adjusted scale factor
+    if abs(actual_rate - target_noshow_rate) > 0.05:
+        print(f"Adjusting no-show rate to match target of {target_noshow_rate:.2%}...")
+        # Determine how many no-shows to flip to achieve target rate
+        current_no_shows = full_df['is_noshow'].sum()
+        target_no_shows = int(target_noshow_rate * len(full_df))
+        
+        if current_no_shows > target_no_shows:
+            # Need to flip some no-shows to shows
+            no_show_indices = full_df[full_df['is_noshow'] == True].index
+            num_to_flip = current_no_shows - target_no_shows
+            indices_to_flip = np.random.choice(no_show_indices, size=num_to_flip, replace=False)
+            full_df.loc[indices_to_flip, 'is_noshow'] = False
+        else:
+            # Need to flip some shows to no-shows
+            show_indices = full_df[full_df['is_noshow'] == False].index
+            num_to_flip = target_no_shows - current_no_shows
+            indices_to_flip = np.random.choice(show_indices, size=num_to_flip, replace=False)
+            full_df.loc[indices_to_flip, 'is_noshow'] = True
+        
+        # Verify the new rate
+        adjusted_rate = full_df['is_noshow'].mean()
+        print(f"Adjusted no-show rate: {adjusted_rate:.2%}")
+    
     return full_df
 
 if __name__ == "__main__":
     # Generate and save synthetic data
-    data = generate_synthetic_data()
-    data.to_csv('../data/synthetic_appointments.csv', index=False)
-    print(f"Generated {len(data)} synthetic appointments")
+    data = generate_realistic_synthetic_data(n_patients=2000, n_appointments=10000, target_noshow_rate=0.25)
+    data.to_csv('../data/realistic_synthetic_appointments.csv', index=False)
+    print(f"Generated {len(data)} synthetic appointments with {data['is_noshow'].mean():.2%} no-show rate")
