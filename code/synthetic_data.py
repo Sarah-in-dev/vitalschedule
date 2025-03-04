@@ -71,9 +71,9 @@ def generate_synthetic_data(n_patients=1000, n_appointments=5000):
         patient = patients_df.iloc[patient_idx]
         
         # Appointment date and time
-        days_offset = np.random.randint(0, 365)
-        hour = np.random.choice(range(8, 17))  # 8 AM to 4 PM
-        minute = np.random.choice([0, 15, 30, 45])
+        days_offset = int(np.random.randint(0, 365))
+        hour = int(np.random.choice(range(8, 17)))
+        minute = int(np.random.choice([0, 15, 30, 45]))
         appt_datetime = start_date + timedelta(days=days_offset, hours=hour, minutes=minute)
         
         # Day of week effect

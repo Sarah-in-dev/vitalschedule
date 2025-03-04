@@ -1,0 +1,26 @@
+Numerical features:
+- age
+- distance
+- lead_time
+- transport_score
+- ses_score
+- days_since_prev_appt
+- historical_noshow_rate
+- temperature
+- precipitation_probability
+- weather_severity
+- median_income
+- transit_score
+- population_density
+- poverty_rate
+- health_insurance_rate
+
+Categorical features:
+- gender
+- insurance
+- appointment_type
+- time_of_day
+- season
+- day_name
+- condition
+- part_of_month

@@ -1,0 +1,33 @@
+VitalSchedule Analysis Summary
+Date: 2025-03-04 15:04:13
+
+Dataset Statistics:
+- Total appointments: 10000
+- No-show rate: 70.68%
+- Number of patients: 1990
+
+Top 5 No-Show Factors:
+- noshow_history_bin: 0.6917
+  Highest in 76-100% (69.2%), Lowest in No history (0.0%)
+- lead_time_bin: 0.3070
+  Highest in 2-3 months (82.4%), Lowest in Same day (51.6%)
+- appointment_type: 0.0909
+  Highest in Behavioral Health (77.2%), Lowest in Specialty (68.1%)
+- day_name: 0.0747
+  Highest in Friday (74.3%), Lowest in Saturday (66.8%)
+- distance_bin: 0.0518
+  Highest in 30+ miles (73.9%), Lowest in 20-30 miles (68.7%)
+
+Model Performance:
+- Random_Forest:
+  accuracy: 0.9010
+  precision: 0.9094
+  recall: 0.9536
+  f1: 0.9310
+  auc: 0.9501
+- Xgboost:
+  accuracy: 0.8995
+  precision: 0.9225
+  recall: 0.9350
+  f1: 0.9287
+  auc: 0.9693
