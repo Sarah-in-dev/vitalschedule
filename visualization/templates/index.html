@@ -1,0 +1,73 @@
+cat > ~/vitalschedule/visualization/templates/index.html << 'EOL'
+<!DOCTYPE html>
+<html>
+<head>
+    <title>VitalSchedule - Predictive No-Show Analytics</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>VitalSchedule Analytics</h1>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/dashboard">Dashboard</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <section class="risk-assessment">
+            <h2>Appointment Risk Assessment</h2>
+            <form id="risk-form">
+                <div class="form-group">
+                    <label for="patient-id">Patient ID:</label>
+                    <input type="text" id="patient-id" name="patient-id">
+                </div>
+                <div class="form-group">
+                    <label for="appointment-time">Appointment Time:</label>
+                    <input type="datetime-local" id="appointment-time" name="appointment-time">
+                </div>
+                <div class="form-group">
+                    <label for="appointment-type">Appointment Type:</label>
+                    <select id="appointment-type" name="appointment-type">
+                        <option value="primary">Primary Care</option>
+                        <option value="behavioral">Behavioral Health</option>
+                        <option value="dental">Dental</option>
+                    </select>
+                </div>
+                <button type="submit">Calculate Risk</button>
+            </form>
+            
+            <div id="risk-results" class="hidden">
+                <h3>Risk Assessment Results</h3>
+                <div class="risk-score">
+                    <span id="score-value">75%</span>
+                    <p>Probability of no-show</p>
+                </div>
+                
+                <div class="risk-factors">
+                    <h4>Key Risk Factors</h4>
+                    <ul id="factors-list">
+                        <!-- Will be populated by JavaScript -->
+                    </ul>
+                </div>
+                
+                <div class="interventions">
+                    <h4>Recommended Interventions</h4>
+                    <ul id="interventions-list">
+                        <!-- Will be populated by JavaScript -->
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2025 Vital Care Innovations</p>
+    </footer>
+    
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
+EOL
