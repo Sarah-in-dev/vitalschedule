@@ -1,0 +1,38 @@
+# Data files
+data/raw/
+*.csv
+*.xlsx
+*.parquet
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.ipynb_checkpoints
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Model files
+models/*.pkl
+models/*.joblib
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
