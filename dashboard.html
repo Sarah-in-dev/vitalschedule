@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VitalSchedule - Operational Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <nav class="bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between h-16">
+                <div class="flex">
+                    <div class="flex-shrink-0 flex items-center">
+                        <a href="index.html" class="font-bold text-xl text-blue-600">VitalSchedule</a>
+                    </div>
+                    <div class="ml-6 flex space-x-8">
+                        <a href="index.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Home</a>
+                        <a href="dashboard.html" class="border-blue-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Dashboard</a>
+                        <a href="analytics.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Analytics</a>
+                        <a href="roi.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">ROI Calculator</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="p-8 max-w-6xl mx-auto">
+        <h1 class="text-3xl font-bold mb-6">Operational Dashboard</h1>
+        <p class="mb-8 text-gray-600">
+            The VitalSchedule operational dashboard provides staff with real-time risk assessment and actionable intervention recommendations.
+        </p>
+        
+        <div class="bg-white shadow rounded-lg p-6 mb-8">
+            <h2 class="text-xl font-medium mb-4">Dashboard Overview</h2>
+            <img src="images/dashboard-overview.png" alt="Dashboard Overview" class="w-full border rounded-lg mb-4">
+            <p class="text-gray-600">
+                The Overview tab shows appointments at risk today, with an improvement summary showing expected vs. predicted no-shows with VitalSchedule interventions.
+            </p>
+        </div>
+        
+        <div class="bg-white shadow rounded-lg p-6 mb-8">
+            <h2 class="text-xl font-medium mb-4">Today's Appointments</h2>
+            <img src="images/dashboard-appointments.png" alt="Today's Appointments" class="w-full border rounded-lg mb-4">
+            <p class="text-gray-600">
+                The Appointments tab provides detailed risk scores for each patient, with personalized intervention recommendations based on specific risk factors.
+            </p>
+        </div>
+        
+        <div class="bg-white shadow rounded-lg p-6 mb-8">
+            <h2 class="text-xl font-medium mb-4">Intervention Tracking</h2>
+            <img src="images/dashboard-interventions.png" alt="Intervention Tracking" class="w-full border rounded-lg mb-4">
+            <p class="text-gray-600">
+                The Interventions tab tracks completed interventions and their outcomes, with effectiveness rates for different intervention types.
+            </p>
+        </div>
+        
+        <div class="bg-white shadow rounded-lg p-6">
+            <h2 class="text-xl font-medium mb-4">Impact Analysis</h2>
+            <img src="images/dashboard-impact.png" alt="Impact Analysis" class="w-full border rounded-lg mb-4">
+            <p class="text-gray-600">
+                The Impact tab shows concrete results by department, with monthly metrics on appointments saved, revenue recovered, and provider time saved.
+            </p>
+        </div>
+    </div>
+</body>
+</html>

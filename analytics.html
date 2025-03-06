@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VitalSchedule - Predictive Analysis</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <nav class="bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between h-16">
+                <div class="flex">
+                    <div class="flex-shrink-0 flex items-center">
+                        <a href="index.html" class="font-bold text-xl text-blue-600">VitalSchedule</a>
+                    </div>
+                    <div class="ml-6 flex space-x-8">
+                        <a href="index.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Home</a>
+                        <a href="dashboard.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Dashboard</a>
+                        <a href="analytics.html" class="border-blue-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Analytics</a>
+                        <a href="roi.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">ROI Calculator</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="p-8 max-w-6xl mx-auto">
+        <h1 class="text-3xl font-bold mb-6">Advanced Predictive Analysis</h1>
+        <p class="mb-8 text-gray-600">
+            VitalSchedule's AI engine analyzes over 40 data points to predict no-shows and recommend personalized interventions.
+        </p>
+        
+        <div class="bg-white shadow rounded-lg p-6 mb-8">
+            <h2 class="text-xl font-medium mb-4">Risk Predictors</h2>
+            <img src="images/analytics-predictors.png" alt="Risk Predictors" class="w-full border rounded-lg mb-4">
+            <p class="text-gray-600">
+                The Risk Predictors tab shows the key factors our AI evaluates, with previous no-show history being the strongest predictor at 69% importance.
+            </p>
+        </div>
+        
+        <div class="bg-white shadow rounded-lg p-6 mb-8">
+            <h2 class="text-xl font-medium mb-4">Smart Interventions</h2>
+            <img src="images/analytics-interventions.png" alt="Smart Interventions" class="w-full border rounded-lg mb-4">
+            <p class="text-gray-600">
+                The Interventions tab shows our intelligent intervention strategies, with transportation assistance having the highest effectiveness rate at 86%.
+            </p>
+        </div>
+        
+        <div class="bg-white shadow rounded-lg p-6">
+            <h2 class="text-xl font-medium mb-4">Interaction Sequences</h2>
+            <img src="images/analytics-sequences.png" alt="Interaction Sequences" class="w-full border rounded-lg mb-4">
+            <p class="text-gray-600">
+                The Sequences tab shows how VitalSchedule creates optimized interaction sequences for different patient profiles, with strategic touchpoints from 14 days before the appointment through the day of service.
+            </p>
+        </div>
+    </div>
+</body>
+</html>
