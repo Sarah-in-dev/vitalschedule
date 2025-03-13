@@ -52,6 +52,26 @@ const Navbar = () => {
               >
                 ROI Calculator
               </NavLink>
+              <NavLink 
+                to="/technology-advantage" 
+                className={({ isActive }) => 
+                  isActive 
+                    ? "border-blue-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium" 
+                    : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+                }
+              >
+                Technology
+              </NavLink>
+              <NavLink 
+                to="/implementation-timeline" 
+                className={({ isActive }) => 
+                  isActive 
+                    ? "border-blue-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium" 
+                    : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+                }
+              >
+                Implementation
+              </NavLink>
             </div>
           </div>
         </div>

@@ -25,8 +25,8 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/roi" element={<ROI />} />
-            <Route path="/technology-advantage" component={TechnologyCostAdvantage} />
-            <Route path="/implementation-timeline" component={ImplementationTimeline} />
+            <Route path="/technology-advantage" element={<TechnologyCostAdvantage />} />
+            <Route path="/implementation-timeline" element={<ImplementationTimeline />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
