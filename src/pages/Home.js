@@ -26,6 +26,20 @@ const Home = () => {
         </Link>
       </div>
       
+      {/* New section for technology advantages */}
+      <h2 className="text-2xl font-bold mt-10 mb-4">Technology Advantages</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <Link to="/technology-advantage" className="p-6 bg-yellow-50 rounded-lg shadow hover:shadow-md transition">
+          <h2 className="text-xl font-bold text-yellow-700 mb-2">Technology Cost Advantage</h2>
+          <p className="text-gray-600">See how our architecture delivers significant cost savings compared to traditional ML approaches</p>
+        </Link>
+        
+        <Link to="/implementation-timeline" className="p-6 bg-indigo-50 rounded-lg shadow hover:shadow-md transition">
+          <h2 className="text-xl font-bold text-indigo-700 mb-2">Implementation Timeline</h2>
+          <p className="text-gray-600">Discover how we deliver results in 4-6 months versus 12-18 months for traditional solutions</p>
+        </Link>
+      </div>
+      
       <div className="mt-8 p-4 bg-gray-50 rounded-lg border border-gray-200">
         <h2 className="text-xl font-bold mb-2">About VitalSchedule</h2>
         <p className="text-gray-600 mb-4">

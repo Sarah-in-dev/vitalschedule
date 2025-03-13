@@ -1,0 +1,26 @@
+VitalSchedule ROI Analysis Summary
+=================================
+
+Analysis Date: 2025-03-04 17:05:47
+Risk Threshold: 0.3
+Appointment Value: $150
+
+Dataset Overview:
+  Total Appointments: 10000
+  Average Risk Score: 25.62%
+  High-Risk Appointments: 1245 (12.45%)
+
+Financial Impact:
+  Interventions Applied: 1245.0
+  Total Intervention Cost: $1867.50
+  Expected Revenue Gained: $-370116.46
+  Net Benefit: $-371983.96
+  Return on Investment: -19918.8%
+
+Top Intervention Types:
+  standard_reminder: 1245 (100.0%)
+  personalized_sms: 1245 (100.0%)
+
+Recommendations:
+  - The current intervention strategy does not show positive ROI
+  - Reevaluate intervention costs or target higher risk appointments

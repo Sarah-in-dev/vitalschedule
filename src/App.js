@@ -10,6 +10,8 @@ import Home from './pages/Home';
 import Dashboard from './pages/Dashboard';
 import Analytics from './pages/Analytics';
 import ROI from './pages/ROI';
+import TechnologyCostAdvantage from './components/TechnologyCostAdvantage';
+import ImplementationTimeline from './components/ImplementationTimeline';
 import NotFound from './pages/NotFound';
 
 function App() {
@@ -23,6 +25,8 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/roi" element={<ROI />} />
+            <Route path="/technology-advantage" component={TechnologyCostAdvantage} />
+            <Route path="/implementation-timeline" component={ImplementationTimeline} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
