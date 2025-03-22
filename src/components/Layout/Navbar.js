@@ -1,4 +1,4 @@
-import React from 'react';
+kimport React from 'react';
 import { NavLink } from 'react-router-dom';
 
 const Navbar = () => {
@@ -6,9 +6,9 @@ const Navbar = () => {
     <nav className="bg-white shadow-sm">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex justify-between h-16">
-          <div className="flex">
+          <div className="flex overflow-x-auto">
             <div className="flex-shrink-0 flex items-center">
-              <NavLink to="/" className="font-bold text-xl text-blue-600">VitalSchedule</NavLink>
+              <NavLink to="/" className="font-bold text-xl text-blue-600">PredictiveRx AI</NavLink>
             </div>
             <div className="ml-6 flex space-x-8">
               <NavLink 
@@ -53,7 +53,7 @@ const Navbar = () => {
                 ROI Calculator
               </NavLink>
               <NavLink 
-                to="/technology-advantage" 
+                to="/technology-overview" 
                 className={({ isActive }) => 
                   isActive 
                     ? "border-blue-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium" 
@@ -61,6 +61,26 @@ const Navbar = () => {
                 }
               >
                 Technology
+              </NavLink>
+              <NavLink 
+                to="/explainable-ai" 
+                className={({ isActive }) => 
+                  isActive 
+                    ? "border-blue-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium" 
+                    : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+                }
+              >
+                Explainable AI
+              </NavLink>
+              <NavLink 
+                to="/technology-advantage" 
+                className={({ isActive }) => 
+                  isActive 
+                    ? "border-blue-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium" 
+                    : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+                }
+              >
+                Cost Advantage
               </NavLink>
               <NavLink 
                 to="/implementation-timeline" 
