@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Database, Brain, BarChart2, Target, RefreshCw, ArrowRight } from 'lucide-react';
 
 const PredictiveRxTechnology = () => {
   const [expandedStep, setExpandedStep] = useState(null);
@@ -14,7 +13,6 @@ const PredictiveRxTechnology = () => {
     {
       id: 'data',
       title: 'Data Foundation',
-      icon: Database,
       description: 'Our platform combines comprehensive pre-trained healthcare datasets with your organization-specific data.',
       details: [
         'Secure integration with your EHR and practice management systems',
@@ -26,7 +24,6 @@ const PredictiveRxTechnology = () => {
     {
       id: 'ml',
       title: 'ML Engine',
-      icon: Brain,
       description: 'Our advanced machine learning engine identifies complex patterns to predict healthcare outcomes.',
       details: [
         'Gradient boosting architecture optimized for healthcare applications',
@@ -38,7 +35,6 @@ const PredictiveRxTechnology = () => {
     {
       id: 'risk',
       title: 'Risk Assessment',
-      icon: BarChart2,
       description: 'The system generates personalized risk scores with detailed factor analysis.',
       details: [
         'Probability scoring on a 0-100% scale',
@@ -50,7 +46,6 @@ const PredictiveRxTechnology = () => {
     {
       id: 'intervention',
       title: 'Smart Interventions',
-      icon: Target,
       description: 'Evidence-based intervention recommendations targeted to specific risk factors.',
       details: [
         'Factor-matched intervention suggestions',
@@ -62,7 +57,6 @@ const PredictiveRxTechnology = () => {
     {
       id: 'learning',
       title: 'Continuous Learning',
-      icon: RefreshCw,
       description: 'The system continuously improves by analyzing intervention outcomes.',
       details: [
         'Outcome tracking to measure intervention effectiveness',
@@ -147,39 +141,19 @@ const PredictiveRxTechnology = () => {
               
               {/* Icons and Labels */}
               <circle cx="80" cy="80" r="24" fill="#DBEAFE" />
-              <foreignObject x="56" y="56" width="48" height="48">
-                <div xmlns="http://www.w3.org/1999/xhtml" className="h-full w-full flex items-center justify-center text-blue-600">
-                  <Database size={24} />
-                </div>
-              </foreignObject>
+              <text x="80" y="84" textAnchor="middle" fontSize="16" fontWeight="bold" fill="#3B82F6">DB</text>
               
               <circle cx="240" cy="80" r="24" fill="#DBEAFE" />
-              <foreignObject x="216" y="56" width="48" height="48">
-                <div xmlns="http://www.w3.org/1999/xhtml" className="h-full w-full flex items-center justify-center text-blue-600">
-                  <Brain size={24} />
-                </div>
-              </foreignObject>
+              <text x="240" y="84" textAnchor="middle" fontSize="16" fontWeight="bold" fill="#3B82F6">ML</text>
               
               <circle cx="400" cy="80" r="24" fill="#DBEAFE" />
-              <foreignObject x="376" y="56" width="48" height="48">
-                <div xmlns="http://www.w3.org/1999/xhtml" className="h-full w-full flex items-center justify-center text-blue-600">
-                  <BarChart2 size={24} />
-                </div>
-              </foreignObject>
+              <text x="400" y="84" textAnchor="middle" fontSize="16" fontWeight="bold" fill="#3B82F6">RA</text>
               
               <circle cx="560" cy="80" r="24" fill="#DBEAFE" />
-              <foreignObject x="536" y="56" width="48" height="48">
-                <div xmlns="http://www.w3.org/1999/xhtml" className="h-full w-full flex items-center justify-center text-blue-600">
-                  <Target size={24} />
-                </div>
-              </foreignObject>
+              <text x="560" y="84" textAnchor="middle" fontSize="16" fontWeight="bold" fill="#3B82F6">SI</text>
               
               <circle cx="720" cy="80" r="24" fill="#DBEAFE" />
-              <foreignObject x="696" y="56" width="48" height="48">
-                <div xmlns="http://www.w3.org/1999/xhtml" className="h-full w-full flex items-center justify-center text-blue-600">
-                  <RefreshCw size={24} />
-                </div>
-              </foreignObject>
+              <text x="720" y="84" textAnchor="middle" fontSize="16" fontWeight="bold" fill="#3B82F6">CL</text>
               
               {/* Labels */}
               <text x="80" y="130" textAnchor="middle" fontSize="14" fontWeight="500" fill="#374151">Data Foundation</text>
@@ -217,7 +191,7 @@ const PredictiveRxTechnology = () => {
                 >
                   <div className="flex items-center">
                     <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
-                      <step.icon className="text-blue-600" size={20} />
+                      <span className="text-blue-600 font-bold">{step.title.substring(0, 2)}</span>
                     </div>
                     <div>
                       <h4 className="font-medium text-gray-800">{step.title}</h4>
@@ -229,7 +203,7 @@ const PredictiveRxTechnology = () => {
                 {/* Connector Arrow (except after last item) */}
                 {index < technologySteps.length - 1 && (
                   <div className="flex justify-center">
-                    <ArrowRight className="text-gray-400" />
+                    <span className="text-gray-400 text-2xl">↓</span>
                   </div>
                 )}
               </React.Fragment>
@@ -237,8 +211,8 @@ const PredictiveRxTechnology = () => {
             
             {/* Mobile Feedback Loop Indicator */}
             <div className="flex justify-center items-center text-gray-500 text-xs">
-              <RefreshCw size={12} className="mr-1" />
-              <span>Continuous learning feedback loop</span>
+              <span>⟲</span>
+              <span className="ml-1">Continuous learning feedback loop</span>
             </div>
           </div>
         </div>
@@ -252,7 +226,7 @@ const PredictiveRxTechnology = () => {
               <div key={step.id}>
                 <div className="flex items-center mb-4">
                   <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
-                    <step.icon className="text-blue-600" size={20} />
+                    <span className="text-blue-600 font-bold">{step.title.substring(0, 2)}</span>
                   </div>
                   <h4 className="text-lg font-medium text-gray-800">{step.title}</h4>
                 </div>
