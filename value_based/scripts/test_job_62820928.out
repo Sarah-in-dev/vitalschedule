@@ -1,0 +1,20 @@
+/home/sdavidson2/vitalschedule/value_based/scripts
+User: sdavidson2
+Host: c0702a-s6
+Date: Thu Mar 27 20:27:36 EDT 2025
+total 116
+drwxr-xr-x  4 sdavidson2 mcb4324 6144 Mar 27 20:27 .
+drwxr-xr-x 10 sdavidson2 mcb4324 5120 Mar 27 20:03 ..
+drwxr-xr-x  3 sdavidson2 mcb4324  512 Mar 27 20:23 ~
+-rw-r--r--  1 sdavidson2 mcb4324 7214 Mar 27 20:17 build_complexity_model.py
+-rw-r--r--  1 sdavidson2 mcb4324 9900 Mar 27 20:18 build_prediction_models.py
+-rw-r--r--  1 sdavidson2 mcb4324 8205 Mar 27 20:17 process_clinical_data.py
+-rw-r--r--  1 sdavidson2 mcb4324 6366 Mar 27 20:14 process_diagnoses.py
+-rw-r--r--  1 sdavidson2 mcb4324 4352 Mar 27 20:14 process_medication.py
+-rw-r--r--  1 sdavidson2 mcb4324 7109 Mar 27 20:13 process_patient_data.py
+-rw-r--r--  1 sdavidson2 mcb4324    0 Mar 27 20:27 test_job_62820928.err
+-rw-r--r--  1 sdavidson2 mcb4324  119 Mar 27 20:27 test_job_62820928.out
+-rw-r--r--  1 sdavidson2 mcb4324  493 Mar 27 20:27 test_job.sh
+drwxr-xr-x  2 sdavidson2 mcb4324    0 Mar 27 20:27 test_output
+-rwxr-xr-x  1 sdavidson2 mcb4324 2216 Mar 27 20:24 vbc_pipeline.sh
+Job completed successfully

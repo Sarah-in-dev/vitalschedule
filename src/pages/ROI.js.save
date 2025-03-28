@@ -1,0 +1,351 @@
+import React, { useState } from 'react';
+
+const ROI = () => {
+  const [activeCalculator, setActiveCalculator] = useState('noshow');
+  const [showFullBenefits, setShowFullBenefits] = useState(true);
+
+  // Common components and functions for both calculators
+  const formatCurrency = (value) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      maximumFractionDigits: 0
+    }).format(value);
+  };
+  
+  const formatPercent = (value) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'percent',
+      maximumFractionDigits: 1
+    }).format(value);
+  };
+
+  // Calculate implementation costs using a non-linear scale to show economies of scale
+  const calculateImplementationCost = (volume, basePrice, volumeFactor, maxDiscount) => {
+    // Calculate discount percentage based on volume (capped at maxDiscount)
+    // Using a logarithmic curve for smoother scaling
+    const discount = Math.min(maxDiscount, Math.log10(volume / 1000) * 0.1);
+    
+    // Base price + (volume factor with discount)
+    return Math.max(basePrice, basePrice + (volume * volumeFactor * (1 - discount)));
+  };
+
+  // No-Show Calculator Component
+  const NoShowCalculator = () => {
+    const [inputs, setInputs] = useState({
+      annualVisits: 50000,
+      currentNoShowRate: 25,
+      revenuePerVisit: 150,
+      expectedReduction: 30,
+      implementationCost: 450000,
+      annualMaintenanceCost: 95000
+    });
+    
+    const [results, setResults] = useState({
+      appointmentsSaved: 0,
+      directRevenue: 0,
+      providerProductivity: 0,
+      frontDeskEfficiency: 0,
+      reducedOvertime: 0,
+      improvedCollections: 0,
+      payerMixOptimization: 0,
+      patientRetention: 0,
+      totalAnnualBenefit: 0,
+      // Direct revenue only calculations
+      directRevenueROI: {
+        firstYearROI: 0,
+        threeYearROI: 0,
+        fiveYearROI: 0,
+        paybackMonths: 0
+      },
+      // Full benefits calculations
+      fullBenefitsROI: {
+        firstYearROI: 0,
+        threeYearROI: 0,
+        fiveYearROI: 0,
+        paybackMonths: 0
+      }
+    });
+
+    // Update implementation costs based on annual visits with non-linear scaling
+    React.useEffect(() => {
+      // Only update costs when component mounts
+      // For visits: Base price = 200,000, volume factor = 5, max discount = 40%
+      const suggestedImplementationCost = calculateImplementationCost(
+        inputs.annualVisits, 200000, 5, 0.4
+      );
+      
+      // For maintenance: Base price = 50,000, volume factor = 0.9, max discount = 35%
+      const suggestedMaintenanceCost = calculateImplementationCost(
+        inputs.annualVisits, 50000, 0.9, 0.35
+      );
+      
+      setInputs(prev => ({
+        ...prev,
+        implementationCost: Math.round(suggestedImplementationCost),
+        annualMaintenanceCost: Math.round(suggestedMaintenanceCost)
+      }));
+    }, []);
+    
+    // Calculate ROI whenever inputs change
+    React.useEffect(() => {
+      calculateROI();
+    }, [inputs]);
+    
+    // Handle input changes
+    const handleInputChange = (e) => {
+      const { name, value, type } = e.target;
+      let parsedValue = value;
+      
+      if (type === 'number') {
+        parsedValue = parseFloat(value) || 0;
+      }
+      
+      setInputs(prev => ({
+        ...prev,
+        [name]: parsedValue
+      }));
+    };
+    
+    // Calculate all ROI metrics
+    const calculateROI = () => {
+      // Calculate appointments saved
+      const appointmentsSaved = Math.round(
+        inputs.annualVisits * (inputs.currentNoShowRate / 100) * (inputs.expectedReduction / 100)
+      );
+      
+      // Calculate direct revenue
+      const directRevenue = appointmentsSaved * inputs.revenuePerVisit;
+      
+      // Calculate additional benefits
+      
+      // Provider productivity (value of time saved)
+      const providerHourlyCost = 150;
+      const avgApptLength = 0.5; // 30 minutes average appointment
+      const providerProductivity = appointmentsSaved * avgApptLength * providerHourlyCost;
+      
+      // Front desk efficiency (reduced scheduling/rescheduling time)
+      const staffHourlyCost = 25;
+      const frontDeskTimePerNoShow = 0.33; // 20 minutes per no-show for follow-up
+      const frontDeskEfficiency = appointmentsSaved * frontDeskTimePerNoShow * staffHourlyCost;
+      
+      // Reduced overtime (less schedule chaos means less overtime)
+      const estimatedStaffFTE = inputs.annualVisits / 2500; // Rough estimate
+      const otReductionHours = estimatedStaffFTE * 2 * (inputs.expectedReduction / 100);
+      const reducedOvertime = otReductionHours * staffHourlyCost * 1.5; // OT at 1.5x
+      
+      // Improved collections (better scheduling means better collection opportunities)
+      const collectionRateImprovement = 0.05; // 5%
+      const improvedCollections = inputs.annualVisits * inputs.revenuePerVisit * collectionRateImprovement;
+      
+      // Payer mix optimization (better scheduling allows prioritization of higher-value appointments)
+      const payerMixImprovement = 0.03; // 3%
+      const payerMixOptimization = inputs.annualVisits * inputs.revenuePerVisit * payerMixImprovement;
+      
+      // Patient retention (better experience means less patient turnover)
+      const patientRetentionValue = 100; // Value of retaining a patient
+      const patientsRetained = inputs.annualVisits / 4 * (inputs.expectedReduction / 100) * 0.2;
+      const patientRetention = patientsRetained * patientRetentionValue;
+      
+      // Calculate total annual benefit (all benefits)
+      const totalAnnualBenefit = directRevenue + providerProductivity + frontDeskEfficiency + 
+                            reducedOvertime + improvedCollections + payerMixOptimization + 
+                            patientRetention;
+      
+      // Calculate implementation and maintenance costs
+      const totalFirstYearCost = inputs.implementationCost + inputs.annualMaintenanceCost;
+      
+      // Calculate ROI based on direct revenue only
+      const directRevenueROI = {
+        firstYearROI: (directRevenue - totalFirstYearCost) / totalFirstYearCost,
+        threeYearROI: ((directRevenue * 3) - (inputs.implementationCost + (inputs.annualMaintenanceCost * 3))) / (inputs.implementationCost + (inputs.annualMaintenanceCost * 3)),
+        fiveYearROI: ((directRevenue * 5) - (inputs.implementationCost + (inputs.annualMaintenanceCost * 5))) / (inputs.implementationCost + (inputs.annualMaintenanceCost * 5)),
+        paybackMonths: (directRevenue > inputs.annualMaintenanceCost) ? 
+          (inputs.implementationCost / ((directRevenue - inputs.annualMaintenanceCost) / 12)) : 
+          Number.POSITIVE_INFINITY
+      };
+      
+      // Calculate ROI based on full benefits
+      const fullBenefitsROI = {
+        firstYearROI: (totalAnnualBenefit - totalFirstYearCost) / totalFirstYearCost,
+        threeYearROI: ((totalAnnualBenefit * 3) - (inputs.implementationCost + (inputs.annualMaintenanceCost * 3))) / (inputs.implementationCost + (inputs.annualMaintenanceCost * 3)),
+        fiveYearROI: ((totalAnnualBenefit * 5) - (inputs.implementationCost + (inputs.annualMaintenanceCost * 5))) / (inputs.implementationCost + (inputs.annualMaintenanceCost * 5)),
+        paybackMonths: (totalAnnualBenefit > inputs.annualMaintenanceCost) ? 
+          (inputs.implementationCost / ((totalAnnualBenefit - inputs.annualMaintenanceCost) / 12)) : 
+          Number.POSITIVE_INFINITY
+      };
+      
+      // Update results
+      setResults({
+        appointmentsSaved,
+        directRevenue,
+        providerProductivity,
+        frontDeskEfficiency,
+        reducedOvertime,
+        improvedCollections,
+        payerMixOptimization,
+        patientRetention,
+        totalAnnualBenefit,
+        directRevenueROI,
+        fullBenefitsROI
+      });
+    };
+    
+    // Calculate suggested implementation costs
+    const suggestedImplementationCost = calculateImplementationCost(
+      inputs.annualVisits, 200000, 5, 0.4
+    );
+    
+    const suggestedMaintenanceCost = calculateImplementationCost(
+      inputs.annualVisits, 50000, 0.9, 0.35
+    );
+
+    return (
+      <div className="bg-white shadow rounded-lg p-6">
+        <h2 className="text-xl font-medium mb-4">No-Show Reduction ROI Calculator</h2>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Annual Visits
+              </label>
+              <input
+                type="number"
+                name="annualVisits"
+                value={inputs.annualVisits}
+                onChange={handleInputChange}
+                className="w-full p-2 border border-gray-300 rounded"
+                min="1000"
+                step="1000"
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Current No-Show Rate (%)
+              </label>
+              <input
+                type="number"
+                name="currentNoShowRate"
+                value={inputs.currentNoShowRate}
+                onChange={handleInputChange}
+                className="w-full p-2 border border-gray-300 rounded"
+                min="0"
+                max="100"
+                step="1"
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Revenue Per Visit ($)
+              </label>
+              <input
+                type="number"
+                name="revenuePerVisit"
+                value={inputs.revenuePerVisit}
+                onChange={handleInputChange}
+                className="w-full p-2 border border-gray-300 rounded"
+                min="0"
+                step="10"
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Expected No-Show Reduction (%)
+              </label>
+              <input
+                type="number"
+                name="expectedReduction"
+                value={inputs.expectedReduction}
+                onChange={handleInputChange}
+                className="w-full p-2 border border-gray-300 rounded"
+                min="0"
+                max="100"
+                step="5"
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Implementation Cost ($)
+              </label>
+              <input
+                type="number"
+                name="implementationCost"
+                value={inputs.implementationCost}
+                onChange={handleInputChange}
+                className="w-full p-2 border border-gray-300 rounded"
+                min="0"
+                step="10000"
+              />
+              <p className="text-xs text-gray-500 mt-1">Suggested: {formatCurrency(Math.round(suggestedImplementationCost))} based on your volume (economies of scale applied)</p>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Annual Maintenance Cost ($)
+              </label>
+              <input
+                type="number"
+                name="annualMaintenanceCost"
+                value={inputs.annualMaintenanceCost}
+                onChange={handleInputChange}
+                className="w-full p-2 border border-gray-300 rounded"
+                min="0"
+                step="5000"
+              />
+              <p className="text-xs text-gray-500 mt-1">Suggested: {formatCurrency(Math.round(suggestedMaintenanceCost))} based on your volume (economies of scale applied)</p>
+            </div>
+          </div>
+          
+          <div className="space-y-6">
+            <div className="flex justify-between mb-2">
+              <div className="text-sm font-medium text-gray-700">ROI Calculation View:</div>
+              <div className="flex space-x-2">
+                <button
+                  onClick={() => setShowFullBenefits(false)}
+                  className={`px-3 py-1 text-xs rounded ${
+                    !showFullBenefits
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
+                  }`}
+                >
+                  Direct Revenue Only
+                </button>
+                <button
+                  onClick={() => setShowFullBenefits(true)}
+                  className={`px-3 py-1 text-xs rounded ${
+                    showFullBenefits
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
+                  }`}
+                >
+                  Full Benefits
+                </button>
+              </div>
+            </div>
+            
+            <div className="bg-blue-50 p-4 rounded-lg">
+              <h3 className="text-lg font-medium mb-3">ROI Summary {!showFullBenefits && "(Direct Revenue Only)"}</h3>
+              
+              <div className="grid grid-cols-2 gap-4 mb-4">
+                <div className="bg-white p-3 rounded-lg border border-blue-100">
+                  <p className="text-sm text-gray-600">Appointments Saved</p>
+                  <p className="text-xl font-bold text-blue-700">{results.appointmentsSaved.toLocaleString()}</p>
+                  <p className="text-xs text-gray-500">annually</p>
+                </div>
+                
+                <div className="bg-white p-3 rounded-lg border border-blue-100">
+                  <p className="text-sm text-gray-600">Direct Revenue</p>
+                  <p className="text-xl font-bold text-blue-700">{formatCurrency(results.directRevenue)}</p>
+                  <p className="text-xs text-gray-500">annually</p>
+                </div>
+              </div>
+              
+              <div className="space-y-2 mb-4">
+                <div className="flex justify-between text-sm p-2 bg-white rounded border border-blue-100">
+                  <span>Total Annual Benefit:</span>
+                  <span className="font-bold">{formatCurrency(showFullBenefits ? results.totalAnnualBenefit : 

@@ -1,0 +1,12 @@
+# MIMIC data
+data/raw/mimic-iv/
+data/processed/readmission/*.csv
+data/processed/readmission/*.gz
+
+# Model files
+models/readmission/*.joblib
+models/readmission/*.pkl
+
+# Large output files
+outputs/readmission/**/*.png
+outputs/readmission/**/models/

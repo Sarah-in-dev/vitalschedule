@@ -1,0 +1,36 @@
+/tmp/slurmd/job62821345/slurm_script: line 20: /home/sdavidson2/vitalschedule/bin/activate: No such file or directory
+/home/sdavidson2/vitalschedule/value_based/scripts/./process_medication.py:35: DtypeWarning: Columns (11) have mixed types. Specify dtype option on import or set low_memory=False.
+  for i, chunk in enumerate(chunk_iterator):
+/home/sdavidson2/vitalschedule/value_based/scripts/./process_medication.py:35: DtypeWarning: Columns (11) have mixed types. Specify dtype option on import or set low_memory=False.
+  for i, chunk in enumerate(chunk_iterator):
+/home/sdavidson2/vitalschedule/value_based/scripts/./process_medication.py:35: DtypeWarning: Columns (11,14) have mixed types. Specify dtype option on import or set low_memory=False.
+  for i, chunk in enumerate(chunk_iterator):
+/home/sdavidson2/vitalschedule/value_based/scripts/./process_medication.py:35: DtypeWarning: Columns (11,14) have mixed types. Specify dtype option on import or set low_memory=False.
+  for i, chunk in enumerate(chunk_iterator):
+/home/sdavidson2/vitalschedule/value_based/scripts/./process_medication.py:35: DtypeWarning: Columns (11) have mixed types. Specify dtype option on import or set low_memory=False.
+  for i, chunk in enumerate(chunk_iterator):
+/home/sdavidson2/vitalschedule/value_based/scripts/./process_medication.py:35: DtypeWarning: Columns (11) have mixed types. Specify dtype option on import or set low_memory=False.
+  for i, chunk in enumerate(chunk_iterator):
+/home/sdavidson2/vitalschedule/value_based/scripts/./process_medication.py:35: DtypeWarning: Columns (11,14) have mixed types. Specify dtype option on import or set low_memory=False.
+  for i, chunk in enumerate(chunk_iterator):
+/home/sdavidson2/vitalschedule/value_based/scripts/./process_medication.py:35: DtypeWarning: Columns (11) have mixed types. Specify dtype option on import or set low_memory=False.
+  for i, chunk in enumerate(chunk_iterator):
+/home/sdavidson2/vitalschedule/value_based/scripts/./process_medication.py:35: DtypeWarning: Columns (11) have mixed types. Specify dtype option on import or set low_memory=False.
+  for i, chunk in enumerate(chunk_iterator):
+/home/sdavidson2/vitalschedule/value_based/scripts/./process_medication.py:35: DtypeWarning: Columns (11,14) have mixed types. Specify dtype option on import or set low_memory=False.
+  for i, chunk in enumerate(chunk_iterator):
+/home/sdavidson2/vitalschedule/value_based/scripts/./process_medication.py:35: DtypeWarning: Columns (11,14) have mixed types. Specify dtype option on import or set low_memory=False.
+  for i, chunk in enumerate(chunk_iterator):
+/home/sdavidson2/vitalschedule/value_based/scripts/./process_medication.py:35: DtypeWarning: Columns (11) have mixed types. Specify dtype option on import or set low_memory=False.
+  for i, chunk in enumerate(chunk_iterator):
+/home/sdavidson2/vitalschedule/value_based/scripts/./process_medication.py:35: DtypeWarning: Columns (11,14) have mixed types. Specify dtype option on import or set low_memory=False.
+  for i, chunk in enumerate(chunk_iterator):
+/home/sdavidson2/vitalschedule/value_based/scripts/./process_medication.py:35: DtypeWarning: Columns (14) have mixed types. Specify dtype option on import or set low_memory=False.
+  for i, chunk in enumerate(chunk_iterator):
+/home/sdavidson2/vitalschedule/value_based/scripts/./process_medication.py:35: DtypeWarning: Columns (11) have mixed types. Specify dtype option on import or set low_memory=False.
+  for i, chunk in enumerate(chunk_iterator):
+/home/sdavidson2/vitalschedule/value_based/scripts/./process_medication.py:35: DtypeWarning: Columns (11) have mixed types. Specify dtype option on import or set low_memory=False.
+  for i, chunk in enumerate(chunk_iterator):
+/home/sdavidson2/vitalschedule/value_based/scripts/./process_medication.py:35: DtypeWarning: Columns (11) have mixed types. Specify dtype option on import or set low_memory=False.
+  for i, chunk in enumerate(chunk_iterator):
+/home/sdavidson2/vitalschedule/value_based/scripts/./process_medication.py:35: DtypeWarning: Columns (11,14) have mixed types. Specify 

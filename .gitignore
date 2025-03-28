@@ -1,62 +1,40 @@
-# Data files
-data/raw/
-*.csv
-*.xlsx
-*.parquet
+physionet.org/files/mimiciv/
 
-# Python
+
+# Node / JavaScript
+node_modules/
+*.log
+*.tar.xz
+
+# Conda / virtual envs
+.env/
+.venv/
+
+# VSCode
+.vscode/
+
+
+# Large data files
+*.csv
+*.parquet
+*.feather
+*.pkl
+*.joblib
+*.h5
+*.model
+
+# Data directories
+/data/raw/
+/value_based/processed_data/
+/outputs/
+
+# Python artifacts
 __pycache__/
 *.py[cod]
-*$py.class
-*.so
-.Python
-*.ipynb_checkpoints
+*.class
+.ipynb_checkpoints/
 
-# Environments
-.env
-.venv
-env/
-venv/
-ENV/
-
-# Distribution / packaging
-dist/
-build/
-*.egg-info/
-
-# Jupyter Notebook
-.ipynb_checkpoints
-
-# Model files
-models/*.pkl
-models/*.joblib
-
-# IDE files
-.idea/
-.vscode/
+# Temporary files
+.DS_Store
 *.swp
 *.swo
-=======
-# dependencies
-/node_modules
-/.pnp
-.pnp.js
-
-# testing
-/coverage
-
-# production
-/build
-
-# misc
-.DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-# Logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
