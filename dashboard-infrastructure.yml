@@ -1,0 +1,107 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Value-Based Care Dashboard Infrastructure'
+
+Parameters:
+  RepositoryName:
+    Type: String
+    Default: vbc-dashboard
+    Description: Name of the ECR repository
+  
+  AppRunnerServiceName:
+    Type: String
+    Default: vbc-dashboard-service
+    Description: Name of the App Runner service
+  
+  ImagePort:
+    Type: Number
+    Default: 8501
+    Description: Port the container exposes
+  
+  EnvironmentName:
+    Type: String
+    Default: production
+    AllowedValues:
+      - development
+      - staging
+      - production
+    Description: Environment name
+
+Resources:
+  # ECR Repository
+  ECRRepository:
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: !Ref RepositoryName
+      ImageScanningConfiguration:
+        ScanOnPush: true
+      LifecyclePolicy:
+        LifecyclePolicyText: |
+          {
+            "rules": [
+              {
+                "rulePriority": 1,
+                "description": "Keep only the last 5 images",
+                "selection": {
+                  "tagStatus": "any",
+                  "countType": "imageCountMoreThan",
+                  "countNumber": 5
+                },
+                "action": {
+                  "type": "expire"
+                }
+              }
+            ]
+          }
+  
+  # IAM Role for App Runner
+  AppRunnerECRAccessRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub AppRunnerECRAccessRole-${EnvironmentName}
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: build.apprunner.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSAppRunnerServicePolicyForECRAccess
+  
+  # App Runner Service
+  AppRunnerService:
+    Type: AWS::AppRunner::Service
+    DependsOn: AppRunnerECRAccessRole
+    Properties:
+      ServiceName: !Ref AppRunnerServiceName
+      SourceConfiguration:
+        AuthenticationConfiguration:
+          AccessRoleArn: !GetAtt AppRunnerECRAccessRole.Arn
+        AutoDeploymentsEnabled: true
+        ImageRepository:
+          ImageIdentifier: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${RepositoryName}:latest
+          ImageConfiguration:
+            Port: !Ref ImagePort
+          ImageRepositoryType: ECR
+      InstanceConfiguration:
+        Cpu: 1 vCPU
+        Memory: 2 GB
+      HealthCheckConfiguration:
+        Path: "/_stcore/health"
+        Protocol: HTTP
+        Interval: 10
+        Timeout: 5
+        HealthyThreshold: 1
+        UnhealthyThreshold: 5
+      Tags:
+        - Key: Environment
+          Value: !Ref EnvironmentName
+
+Outputs:
+  ECRRepositoryURI:
+    Description: URI of the ECR repository
+    Value: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${RepositoryName}
+  
+  AppRunnerServiceURL:
+    Description: URL of the App Runner service
+    Value: !GetAtt AppRunnerService.ServiceUrl
