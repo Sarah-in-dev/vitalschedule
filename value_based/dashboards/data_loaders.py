@@ -2,117 +2,144 @@ import os
 import pandas as pd
 import numpy as np
 import streamlit as st
+from aws_utils import AWSDataConnector
 
 @st.cache_data
-def load_patient_data(data_dir):
+def load_patient_data(data_dir=None, use_aws=True, aws_connector=None):
     """
     Load patient cohort with clinical and complexity data
     
     Parameters:
     -----------
-    data_dir : str
-        Path to the processed data directory
+    data_dir : str, optional
+        Path to the processed data directory (used if use_aws=False)
+    use_aws : bool
+        Whether to load data from AWS S3
+    aws_connector : AWSDataConnector, optional
+        AWS connector instance to use
     
     Returns:
     --------
     pd.DataFrame
         Dataframe containing patient data
     """
-    try:
-        # Try loading from models directory first (for complexity data)
-        complexity_path = os.path.join(data_dir, '..', 'models', 'patients_with_complexity.csv')
-        if os.path.exists(complexity_path):
-            return pd.read_csv(complexity_path)
+    if use_aws:
+        # Create AWS connector if not provided
+        if aws_connector is None:
+            aws_connector = AWSDataConnector()
         
-        # If not found, try loading from processed_data
-        patient_path = os.path.join(data_dir, 'patient_cohort.csv')
-        if os.path.exists(patient_path):
-            patient_data = pd.read_csv(patient_path)
+        # Load merged patient data from AWS
+        return aws_connector.load_merged_patient_data()
+    else:
+        # Original local filesystem loading logic
+        try:
+            # Try loading from models directory first (for complexity data)
+            complexity_path = os.path.join(data_dir, '..', 'models', 'patients_with_complexity.csv')
+            if os.path.exists(complexity_path):
+                return pd.read_csv(complexity_path)
             
-            # Try to merge with conditions data if available
-            conditions_path = os.path.join(data_dir, 'patients_with_conditions.csv')
-            if os.path.exists(conditions_path):
-                conditions_data = pd.read_csv(conditions_path)
-                patient_data = patient_data.merge(
-                    conditions_data[['subject_id', 'unique_chronic_conditions', 'multiple_chronic_conditions']], 
-                    on='subject_id', 
-                    how='left'
-                )
+            # If not found, try loading from processed_data
+            patient_path = os.path.join(data_dir, 'patient_cohort.csv')
+            if os.path.exists(patient_path):
+                patient_data = pd.read_csv(patient_path)
+                
+                # Try to merge with conditions data if available
+                conditions_path = os.path.join(data_dir, 'patients_with_conditions.csv')
+                if os.path.exists(conditions_path):
+                    conditions_data = pd.read_csv(conditions_path)
+                    patient_data = patient_data.merge(
+                        conditions_data[['subject_id', 'unique_chronic_conditions', 'multiple_chronic_conditions']], 
+                        on='subject_id', 
+                        how='left'
+                    )
+                
+                # Try to merge with medications data if available
+                meds_path = os.path.join(data_dir, 'patients_with_medications.csv')
+                if os.path.exists(meds_path):
+                    meds_data = pd.read_csv(meds_path)
+                    patient_data = patient_data.merge(
+                        meds_data[['subject_id', 'unique_medication_count', 'polypharmacy_flag']], 
+                        on='subject_id', 
+                        how='left'
+                    )
+                
+                # Try to merge with clinical data if available
+                clinical_path = os.path.join(data_dir, 'patients_with_clinical.csv')
+                if os.path.exists(clinical_path):
+                    clinical_data = pd.read_csv(clinical_path)
+                    clinical_cols = [col for col in clinical_data.columns if col not in patient_data.columns]
+                    patient_data = patient_data.merge(
+                        clinical_data[['subject_id'] + clinical_cols], 
+                        on='subject_id', 
+                        how='left'
+                    )
+                
+                return patient_data
             
-            # Try to merge with medications data if available
-            meds_path = os.path.join(data_dir, 'patients_with_medications.csv')
-            if os.path.exists(meds_path):
-                meds_data = pd.read_csv(meds_path)
-                patient_data = patient_data.merge(
-                    meds_data[['subject_id', 'unique_medication_count', 'polypharmacy_flag']], 
-                    on='subject_id', 
-                    how='left'
-                )
-            
-            # Try to merge with clinical data if available
-            clinical_path = os.path.join(data_dir, 'patients_with_clinical.csv')
-            if os.path.exists(clinical_path):
-                clinical_data = pd.read_csv(clinical_path)
-                clinical_cols = [col for col in clinical_data.columns if col not in patient_data.columns]
-                patient_data = patient_data.merge(
-                    clinical_data[['subject_id'] + clinical_cols], 
-                    on='subject_id', 
-                    how='left'
-                )
-            
-            return patient_data
+            # If neither found, return None
+            return None
         
-        # If neither found, return None
-        return None
-    
-    except Exception as e:
-        st.error(f"Error loading patient data: {str(e)}")
-        return None
+        except Exception as e:
+            st.error(f"Error loading patient data: {str(e)}")
+            return None
 
 @st.cache_data
-def load_model_results(models_dir):
+def load_model_results(models_dir=None, use_aws=True, aws_connector=None):
     """
     Load model results and feature importance
     
     Parameters:
     -----------
-    models_dir : str
-        Path to the models directory
+    models_dir : str, optional
+        Path to the models directory (used if use_aws=False)
+    use_aws : bool
+        Whether to load data from AWS S3
+    aws_connector : AWSDataConnector, optional
+        AWS connector instance to use
     
     Returns:
     --------
     dict
         Dictionary containing model results
     """
-    results = {}
-    
-    try:
-        # Model summary
-        summary_path = os.path.join(models_dir, 'model_summary.csv')
-        if os.path.exists(summary_path):
-            results['summary'] = pd.read_csv(summary_path)
+    if use_aws:
+        # Create AWS connector if not provided
+        if aws_connector is None:
+            aws_connector = AWSDataConnector()
         
-        # Feature importance for readmission model
-        feature_importance_path = os.path.join(models_dir, 'feature_importance.csv')
-        if os.path.exists(feature_importance_path):
-            results['readmission_importance'] = pd.read_csv(feature_importance_path)
+        # Load all model results from AWS
+        return aws_connector.load_all_model_results()
+    else:
+        # Original local filesystem loading logic
+        results = {}
         
-        # Feature importance for other models
-        for model_type in ['readmission', 'mortality', 'high_utilizer', 'emergency_utilizer', 'extended_icu_stay']:
-            importance_path = os.path.join(models_dir, f'{model_type}_feature_importance.csv')
-            if os.path.exists(importance_path):
-                results[f'{model_type}_importance'] = pd.read_csv(importance_path)
+        try:
+            # Model summary
+            summary_path = os.path.join(models_dir, 'model_summary.csv')
+            if os.path.exists(summary_path):
+                results['summary'] = pd.read_csv(summary_path)
             
-            # Load intervention recommendations if available
-            intervention_path = os.path.join(models_dir, f'{model_type}_interventions.csv')
-            if os.path.exists(intervention_path):
-                results[f'{model_type}_interventions'] = pd.read_csv(intervention_path)
+            # Feature importance for readmission model
+            feature_importance_path = os.path.join(models_dir, 'feature_importance.csv')
+            if os.path.exists(feature_importance_path):
+                results['readmission_importance'] = pd.read_csv(feature_importance_path)
+            
+            # Feature importance for other models
+            for model_type in ['readmission', 'mortality', 'high_utilizer', 'emergency_utilizer', 'extended_icu_stay']:
+                importance_path = os.path.join(models_dir, f'{model_type}_feature_importance.csv')
+                if os.path.exists(importance_path):
+                    results[f'{model_type}_importance'] = pd.read_csv(importance_path)
+                
+                # Load intervention recommendations if available
+                intervention_path = os.path.join(models_dir, f'{model_type}_interventions.csv')
+                if os.path.exists(intervention_path):
+                    results[f'{model_type}_interventions'] = pd.read_csv(intervention_path)
+            
+            return results
         
-        return results
-    
-    except Exception as e:
-        st.error(f"Error loading model results: {str(e)}")
-        return {}
+        except Exception as e:
+            st.error(f"Error loading model results: {str(e)}")
+            return {}
 
 def prepare_filter_options(patient_data):
     """

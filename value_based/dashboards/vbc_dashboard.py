@@ -12,6 +12,7 @@ from condition_viz import display_conditions_dashboard
 from utilization_viz import display_utilization_dashboard
 from model_viz import display_models_dashboard
 from intervention_viz import display_intervention_dashboard
+from aws_utils import AWSDataConnector
 
 # Set page configuration
 st.set_page_config(
@@ -33,33 +34,75 @@ def main():
     # Sidebar for navigation and filters
     st.sidebar.title("Navigation")
     
-    # Data directory selection
+    # Data source selection
     with st.sidebar.expander("Data Source", expanded=False):
-        data_dir = st.text_input(
-            "Processed Data Directory",
-            value="~/vitalschedule/value_based/processed_data",
-            key="data_dir"
+        # AWS vs Local data source
+        data_source = st.radio(
+            "Select Data Source:",
+            ["AWS S3", "Local Files"],
+            index=0  # Default to AWS
         )
         
-        models_dir = st.text_input(
-            "Models Directory",
-            value="~/vitalschedule/value_based/models",
-            key="models_dir"
-        )
-        
-        # Expand paths if needed
-        data_dir = os.path.expanduser(data_dir)
-        models_dir = os.path.expanduser(models_dir)
+        if data_source == "AWS S3":
+            # AWS organization name
+            org_name = st.text_input(
+                "Organization Name",
+                value="predictiverx",
+                key="org_name"
+            )
+            
+            # Create AWS connector
+            aws_connector = AWSDataConnector(org_name=org_name)
+            
+            use_aws = True
+            data_dir = None
+            models_dir = None
+        else:
+            # Local file paths
+            data_dir = st.text_input(
+                "Processed Data Directory",
+                value="~/vitalschedule/value_based/processed_data",
+                key="data_dir"
+            )
+            
+            models_dir = st.text_input(
+                "Models Directory",
+                value="~/vitalschedule/value_based/models",
+                key="models_dir"
+            )
+            
+            # Expand paths if needed
+            data_dir = os.path.expanduser(data_dir)
+            models_dir = os.path.expanduser(models_dir)
+            
+            use_aws = False
+            aws_connector = None
     
     # Load data
     with st.spinner("Loading data..."):
-        patient_data = load_patient_data(data_dir)
-        model_results = load_model_results(models_dir)
+        if use_aws:
+            patient_data = load_patient_data(use_aws=True, aws_connector=aws_connector)
+            model_results = load_model_results(use_aws=True, aws_connector=aws_connector)
+        else:
+            patient_data = load_patient_data(data_dir=data_dir, use_aws=False)
+            model_results = load_model_results(models_dir=models_dir, use_aws=False)
     
     if patient_data is None:
-        st.error(f"Could not load patient data from {data_dir}")
-        st.info("Please check the data directory path and ensure the required files exist.")
+        if use_aws:
+            st.error(f"Could not load patient data from AWS S3")
+            st.info("Please check your AWS credentials and bucket names.")
+        else:
+            st.error(f"Could not load patient data from {data_dir}")
+            st.info("Please check the data directory path and ensure the required files exist.")
         return
+    
+    # Data summary
+    with st.expander("Data Summary", expanded=False):
+        st.write(f"Loaded {len(patient_data)} patient records")
+        st.write(f"Available columns: {', '.join(patient_data.columns)}")
+        
+        if model_results:
+            st.write(f"Loaded model results: {', '.join(model_results.keys())}")
     
     # Prepare filter options
     filter_options = prepare_filter_options(patient_data)
@@ -168,6 +211,14 @@ def main():
         .stMetric .metric-value {
             font-weight: bold;
             color: #2c3e50;
+        }
+        .aws-connected {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .local-connected {
+            color: #2980b9;
+            font-weight: bold;
         }
     </style>
     """, unsafe_allow_html=True)
