@@ -30,13 +30,21 @@ def process_prescriptions_in_chunks(mimic_dir, output_dir, patient_cohort, chunk
     unique_medications = set()
     
     # Process the file in chunks
-    chunk_iterator = pd.read_csv(prescriptions_path, chunksize=chunk_size)
+    chunk_iterator = pd.read_csv(prescriptions_path, chunksize=chunk_size,low_memory=False)
     
     for i, chunk in enumerate(chunk_iterator):
         print(f"Processing chunk {i+1}...")
+
+# Convert problematic columns to string to avoid mixed type issues
+        if 'drug' in chunk.columns:
+            chunk['drug'] = chunk['drug'].astype(str)
         
         # Filter for patients in our cohort
         chunk = chunk[chunk['subject_id'].isin(patient_ids)]
+
+# Skip if no relevant data in this chunk
+        if len(chunk) == 0:
+            continue
         
         # Count medications per patient
         for _, row in chunk.iterrows():

@@ -16,11 +16,11 @@ def parse_args():
     parser.add_argument('--models_dir', type=str, required=True, help='Path to models directory')
     return parser.parse_args()
 
-def load_complexity_data(data_dir):
+def load_complexity_data(data_dir, models_dir):
     """Load patient data with complexity score"""
     print("Loading patient complexity data...")
     
-    complexity_path = os.path.join(data_dir, 'patients_with_complexity.csv')
+    complexity_path = os.path.join(models_dir, 'patients_with_complexity.csv')
     complexity_data = pd.read_csv(complexity_path)
     
     return complexity_data
@@ -226,7 +226,7 @@ def main():
     os.makedirs(args.models_dir, exist_ok=True)
     
     # Load patient data with complexity score
-    patient_data = load_complexity_data(args.data_dir)
+    patient_data = load_complexity_data(args.data_dir,args.models_dir)
     
     # Define events to predict
     events = define_events(patient_data)

@@ -20,14 +20,14 @@ module load python
 source ~/vitalschedule/bin/activate
 
 # Set directories
-MIMIC_DIR=~/vitalschedule/data/raw/mimic-iv
-OUTPUT_DIR=~/vitalschedule/value_based/processed_data
-MODELS_DIR=~/vitalschedule/value_based/models
+MIMIC_DIR=/home/sdavidson2/vitalschedule/data/raw/mimic-iv
+OUTPUT_DIR=/home/sdavidson2/vitalschedule/value_based/processed_data
+MODELS_DIR=/home/sdavidson2/vitalschedule/value_based/models
 
 # Create output directories
 mkdir -p $OUTPUT_DIR
 mkdir -p $MODELS_DIR
-mkdir -p ~/vitalschedule/value_based/logs
+mkdir -p /home/sdavidson2/vitalschedule/value_based/logs
 
 # Check if directories exist
 echo "Checking directories..."
